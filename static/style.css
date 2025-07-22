@@ -1,0 +1,393 @@
+html, body {
+  height: 100%; margin: 0; padding: 0; overflow: hidden;
+  background: #111; color: #eee; font-family: sans-serif;
+}
+#map {
+  height: 100%; width: 100%;
+}
+#sidebar {
+  position: absolute; top: 10px; left: 10px; bottom: 10px; width: 180px;
+  background: #222; padding: 12px; border-radius: 10px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.8);
+  border: 1px solid #444; user-select: none;
+}
+label {
+  font-weight: bold; margin-bottom: 4px; color: #ddd;
+}
+select {
+  width: 100%; padding: 6px; font-size: 14px; border-radius: 4px;
+  border: 1px solid #555; background: #333; color: #eee; box-sizing: border-box;
+  font-family: inherit; transition: border-color 0.2s ease;
+}
+select:focus {
+  outline: none; border-color: #66aaff; background: #222; color: #fff;
+}
+#colorbar-wrapper {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 1000; background: rgba(255,255,255,0.85); padding: 6px 10px;
+  border-radius: 6px; text-align: center; font-family: sans-serif; user-select: none;
+  width: 320px;
+}
+#colorbar {
+  width: 100%; height: 16px; border: 1px solid #aaa; margin-bottom: 4px; border-radius: 3px;
+}
+#colorbar-label {
+  font-size: 13px; color: #222;
+}
+#value-tooltip {
+  position: absolute; pointer-events: none; background: rgba(30,30,30,0.85);
+  color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 16px;
+  font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  white-space: nowrap; display: none; z-index: 1100; user-select: none;
+  box-shadow: 0 0 8px rgba(0,0,0,0.6); transform: translate(15px, 15px);
+  transition: opacity 0.1s ease;
+}
+
+/* Calendar styling */
+#calendar-container {
+  background: #2a2a2a;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #444;
+}
+
+#calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+#calendar-title {
+  font-weight: bold;
+  color: #ddd;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+#calendar-title:hover {
+  background: #444;
+}
+
+#calendar-nav {
+  display: flex;
+  gap: 6px;
+}
+
+#calendar-nav button {
+  background: #333;
+  border: 1px solid #555;
+  color: #eee;
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+
+#calendar-nav button:hover {
+  background: #444;
+}
+
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar-day-header {
+  text-align: center;
+  font-size: 10px;
+  color: #aaa;
+  padding: 2px 0;
+}
+
+.calendar-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #333;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  aspect-ratio: 1;
+}
+
+.calendar-day:hover {
+  background: #444;
+}
+
+.calendar-day.selected {
+  background: #66aaff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.calendar-day.other-month {
+  color: #666;
+}
+
+.calendar-day.today {
+  border: 1px solid #66aaff;
+}
+
+.calendar-day.disabled {
+  color: #444;
+  cursor: not-allowed;
+  background: #2a2a2a;
+}
+
+/* Month/year dropdown */
+#month-year-dropdown {
+  position: absolute;
+  background: #333;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 8px;
+  z-index: 1100;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: none;
+  width: 160px;
+}
+
+#month-year-dropdown.show {
+  display: block;
+}
+
+#month-year-dropdown select {
+  margin-bottom: 8px;
+  font-size: 12px;
+  padding: 4px;
+}
+
+#month-year-dropdown button {
+  background: #444;
+  border: 1px solid #555;
+  color: #eee;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  width: 100%;
+}
+
+#month-year-dropdown button:hover {
+  background: #555;
+}
+
+/* Graph container styles */
+#graph-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(30,30,30,0.95);
+  padding: 10px;
+  border-radius: 8px;
+  width: 600px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.7);
+  display: none;
+  border: 1px solid #444;
+}
+
+
+#graph-wrapper {
+  width: 100%;
+  height: 350px;
+  position: relative;
+}
+
+#graph-canvas {
+  width: 100%;
+  height: 100%;
+  background: #222;
+  border-radius: 4px;
+}
+
+#graph-title {
+  color: #eee;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+#graph-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 18px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 1001;
+}
+
+#graph-close:hover {
+  color: #fff;
+  background: rgba(0,0,0,0.8);
+}
+
+/* Progress container styles - matches graph container */
+#progress-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  background: rgba(30,30,30,0.95);
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.7);
+  display: none;
+  border: 1px solid #444;
+}
+
+#progress-container div {
+  color: #eee;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+#timeseries-progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #222;
+  border: 1px solid #444;
+}
+
+#timeseries-progress::-webkit-progress-bar {
+  background: #222;
+  border-radius: 5px;
+}
+
+#timeseries-progress::-webkit-progress-value {
+  background: #66aaff;
+  border-radius: 5px;
+}
+
+#timeseries-progress::-moz-progress-bar {
+  background: #66aaff;
+  border-radius: 5px;
+}
+
+#progress-text {
+  color: #aaa;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 5px;
+}
+/* Progress bar styles within date picker */
+#date-picker-modal #progress-container {
+margin-top: 15px;
+}
+
+#date-picker-modal #timeseries-progress {
+width: 100%;
+height: 10px;
+border-radius: 5px;
+background: #222;
+border: 1px solid #444;
+}
+
+#date-picker-modal #timeseries-progress::-webkit-progress-bar {
+background: #222;
+border-radius: 5px;
+}
+
+#date-picker-modal #timeseries-progress::-webkit-progress-value {
+background: #66aaff;
+border-radius: 5px;
+}
+
+#date-picker-modal #timeseries-progress::-moz-progress-bar {
+background: #66aaff;
+border-radius: 5px;
+}
+
+#date-picker-modal #progress-text {
+color: #aaa;
+font-size: 12px;
+text-align: center;
+margin-top: 5px;
+}
+
+/* Date picker modal */
+#date-picker-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #333;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 2000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  display: none;
+  width: 300px;
+}
+
+#date-picker-modal h3 {
+  margin-top: 0;
+  color: #eee;
+  text-align: center;
+}
+
+.date-picker-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.date-picker-label {
+  color: #ddd;
+  margin-right: 10px;
+  width: 100px;
+}
+
+.date-picker-input {
+  flex-grow: 1;
+  padding: 6px;
+  background: #444;
+  border: 1px solid #555;
+  color: #eee;
+  border-radius: 4px;
+}
+
+#date-picker-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.date-picker-button {
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+#date-picker-cancel {
+  background: #555;
+  color: #eee;
+}
+
+#date-picker-submit {
+  background: #66aaff;
+  color: #111;
+  font-weight: bold;
+}

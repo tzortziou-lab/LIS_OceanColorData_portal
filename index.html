@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OLCI Viewer with Transect and Timeseries Tools</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="sidebar">
+  <div id="calendar-container">
+    <div id="calendar-header">
+      <div id="calendar-title">July 2025</div>
+      <div id="calendar-nav">
+        <button id="prev-month">&lt;</button>
+        <button id="next-month">&gt;</button>
+      </div>
+    </div>
+    <div id="calendar">
+      <div class="calendar-day-header">S</div>
+      <div class="calendar-day-header">M</div>
+      <div class="calendar-day-header">T</div>
+      <div class="calendar-day-header">W</div>
+      <div class="calendar-day-header">T</div>
+      <div class="calendar-day-header">F</div>
+      <div class="calendar-day-header">S</div>
+    </div>
+  </div>
+
+  <div id="month-year-dropdown">
+    <select id="month-select">
+      <option value="0">January</option>
+      <option value="1">February</option>
+      <option value="2">March</option>
+      <option value="3">April</option>
+      <option value="4">May</option>
+      <option value="5">June</option>
+      <option value="6">July</option>
+      <option value="7">August</option>
+      <option value="8">September</option>
+      <option value="9">October</option>
+      <option value="10">November</option>
+      <option value="11">December</option>
+    </select>
+    <select id="year-select">
+      <option value="2025">2025</option>
+      <option value="2024">2024</option>
+      <option value="2023">2023</option>
+      <option value="2022">2022</option>
+      <option value="2021">2021</option>
+      <option value="2020">2020</option>
+      <option value="2019">2019</option>
+      <option value="2018">2018</option>
+      <option value="2017">2017</option>
+      <option value="2016">2016</option>
+    </select>
+    <button id="apply-month-year">Apply</button>
+  </div>
+
+  <label for="variable-select">Variables:</label>
+  <select id="variable-select">
+    <option value="cdom">CDOM</option>
+    <option value="spm">SPM</option>
+    <option value="chl">Chl-a</option>
+  </select>
+
+  <label for="colormap-select">Colormap:</label>
+  <select id="colormap-select">
+    <option value="turbo">Turbo</option>
+    <option value="viridis">Viridis</option>
+    <option value="magma">Magma</option>
+  </select>
+
+  <label for="tools-select">Tools:</label>
+  <select id="tools-select">
+    <option value="">-- None --</option>
+    <option value="value-picker">Value picker</option>
+    <option value="transect">Transect tool</option>
+    <option value="timeseries">Timeseries tool</option>
+  </select>
+</div>
+
+<div id="colorbar-wrapper">
+  <div id="colorbar"></div>
+  <div id="colorbar-label">CDOM (m⁻¹), range: 0–12</div>
+</div>
+
+<div id="value-tooltip"></div>
+
+<div id="graph-container">
+  <div id="graph-close">&times;</div>
+  <div id="graph-title"></div>
+  <div id="graph-title"></div>
+  <button id="download-csv" style="position: absolute; top: 10px; right: 35px; background: #444; color: #eee; border: 1px solid #555; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Download CSV
+  </button>
+  <div id="graph-wrapper">
+    <canvas id="graph-canvas"></canvas>
+  </div>
+</div>
+
+
+<!-- Date Picker Modal -->
+<div id="date-picker-modal">
+  <h3>Select Date Range</h3>
+  <div class="date-picker-row">
+    <span class="date-picker-label">Start Date:</span>
+    <input type="date" id="start-date" class="date-picker-input" value="2025-07-01">
+  </div>
+  <div class="date-picker-row">
+    <span class="date-picker-label">End Date:</span>
+    <input type="date" id="end-date" class="date-picker-input" value="2025-07-31">
+  </div>
+  
+  <!-- Add progress container inside the date picker -->
+  <div id="progress-container" style="display: none; margin-top: 15px;">
+    <div>Generating Timeseries...</div>
+    <progress id="timeseries-progress" value="0" max="100" style="width: 100%"></progress>
+    <div id="progress-text" style="text-align: center; margin-top: 5px; color: #aaa; font-size: 12px;">0%</div>
+  </div>
+  
+  <div id="date-picker-buttons">
+    <button id="date-picker-cancel" class="date-picker-button">Cancel</button>
+    <button id="date-picker-submit" class="date-picker-button">Submit</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/georaster"></script>
+<script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+<script src="script.js"></script>
+</body>
+</html>
