@@ -5,13 +5,13 @@ steps:
       [
         'build',
         '-t',
-        'us-east4-docker.pkg.dev/omega-ability-466020/my-repo/olci-api',
+        'us-central1-docker.pkg.dev/omega-ability-466020/my-repo/olci-api',
         '.'
       ]
 
   # Step 2: Push Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', us-east4-docker.pkg.dev/omega-ability-466020/my-repo/olci-api]
+    args: ['push', us-central1-docker.pkg.dev/omega-ability-466020/my-repo/olci-api]
 
   # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -22,9 +22,9 @@ steps:
         'deploy',
         'olci-api',
         '--image',
-        'us-east4-docker.pkg.dev/omega-ability-466020/my-repo/olci-api',
+        'us-central1-docker.pkg.dev/omega-ability-466020/my-repo/olci-api',
         '--region',
-        'us-east4',
+        'us-central1',
         '--platform',
         'managed',
         '--allow-unauthenticated'
