@@ -7,9 +7,10 @@ L.tileLayer(
 ).addTo(map);
 
 const baseURL = "https://storage.googleapis.com/lis-olci-netcdfs";
-const backendURL = "http://localhost:8000/get_value";
-const transectBackendURL = "http://localhost:8000/get_transect";
-const timeseriesBackendURL = "http://localhost:8000/get_timeseries";
+const backendURL = "https://olci-api-372215495851.us-central1.run.app/get_value";
+const transectBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_transect";
+const timeseriesBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_timeseries";
+
 
 const variableSettings = {
   cdom: { max: 12, units: "m⁻¹", label: "CDOM" },
