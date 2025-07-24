@@ -2,9 +2,9 @@ from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from utils.raster_utils import get_pixel_value, get_transect_values
-from utils.url_utils import format_url
-from utils.time_utils import generate_dates_in_range
+from app.utils.raster_utils import get_pixel_value, get_transect_values
+from app.utils.url_utils import format_url
+from app.utils.time_utils import generate_dates_in_range
 
 app = FastAPI()
 

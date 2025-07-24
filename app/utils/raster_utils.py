@@ -2,7 +2,7 @@ import rasterio
 from rasterio.warp import transform
 import numpy as np
 import math
-from utils.url_utils import format_google_url
+from app.utils.url_utils import format_google_url
 
 def get_pixel_value(url: str, lat: float, lon: float) -> float:
     try:
