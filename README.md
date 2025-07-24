@@ -1,7 +1,7 @@
 # lisoceancolor
 Long Island Sound ocean color data analytics app
 
-# Languyages & Frameworks
+# Languages & Frameworks
 
 Python 3.x
 
