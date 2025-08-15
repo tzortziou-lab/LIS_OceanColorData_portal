@@ -106,12 +106,12 @@ L.tileLayer(
 // }
 
 const baseURL = "https://storage.googleapis.com/lis-olci-netcdfs";
-const backendURL = "https://olci-api-372215495851.us-central1.run.app/get_value";
-const transectBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_transect";
-const timeseriesBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_timeseries";
-const overlayBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_insitu_data";
-const availableDatesBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_available_dates";
-const polygonBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_polygon_stats";
+// const backendURL = "https://olci-api-372215495851.us-central1.run.app/get_value";
+// const transectBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_transect";
+// const timeseriesBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_timeseries";
+// const insituDataBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_insitu_data";
+// const availableDatesBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_available_dates";
+// const polygonBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_polygon_stats";
 
 // for development
 // const backendURL = "http://localhost:8080/get_value";
