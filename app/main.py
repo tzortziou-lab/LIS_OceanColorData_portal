@@ -373,10 +373,6 @@ async def get_polygon_stats(request: PolygonRequest):
 
             with rasterio.open(tmp_path) as src:
                 # 1. Verify raster has data
-                sample = src.read(1, window=((0, 10000), (0, 1000)))
-                if np.all(sample == src.nodata):
-                    raise HTTPException(status_code=400, detail="Raster has no valid data")
-
                 # height, width = src.shape
                 # sample_size = int(min(height, width) * 0.1)  # 10% of smaller dimension
 
