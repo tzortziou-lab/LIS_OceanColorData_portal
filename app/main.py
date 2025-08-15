@@ -373,27 +373,31 @@ async def get_polygon_stats(request: PolygonRequest):
 
             with rasterio.open(tmp_path) as src:
                 # 1. Verify raster has data
-                height, width = src.shape
-                sample_size = int(min(height, width) * 0.1)  # 10% of smaller dimension
+                sample = src.read(1, window=((0, 10000), (0, 1000)))
+                if np.all(sample == src.nodata):
+                    raise HTTPException(status_code=400, detail="Raster has no valid data")
 
-                windows = [
-                    ((0, sample_size), (0, sample_size)),  # Top-left
-                    ((0, sample_size), (width-sample_size, width)),  # Top-right
-                    ((height-sample_size, height), (0, sample_size)),  # Bottom-left
-                    ((height-sample_size, height), (width-sample_size, width)),  # Bottom-right
-                    ((height//2-sample_size//2, height//2+sample_size//2), 
-                    (width//2-sample_size//2, width//2+sample_size//2))  # Center
-                ]
+                # height, width = src.shape
+                # sample_size = int(min(height, width) * 0.1)  # 10% of smaller dimension
 
-                has_data = False
-                for window in windows:
-                    sample = src.read(1, window=window)
-                    if not np.all(sample == src.nodata):
-                        has_data = True
-                        break
+                # windows = [
+                #     ((0, sample_size), (0, sample_size)),  # Top-left
+                #     ((0, sample_size), (width-sample_size, width)),  # Top-right
+                #     ((height-sample_size, height), (0, sample_size)),  # Bottom-left
+                #     ((height-sample_size, height), (width-sample_size, width)),  # Bottom-right
+                #     ((height//2-sample_size//2, height//2+sample_size//2), 
+                #     (width//2-sample_size//2, width//2+sample_size//2))  # Center
+                # ]
 
-                if not has_data:
-                    raise HTTPException(status_code=400, detail="No valid data found in sampled regions")
+                # has_data = False
+                # for window in windows:
+                #     sample = src.read(1, window=window)
+                #     if not np.all(sample == src.nodata):
+                #         has_data = True
+                #         break
+
+                # if not has_data:
+                #     raise HTTPException(status_code=400, detail="No valid data found in sampled regions")
 
                 # 2. Check polygon intersects raster
                 from shapely.geometry import shape, box
