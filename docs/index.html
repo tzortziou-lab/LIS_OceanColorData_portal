@@ -1,11 +1,187 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OLCI Viewer with Transect and Timeseries Tools</title>
+  <title>OLCI Viewer</title>
   <meta charset="utf-8" />
+  
+  <!-- CSS -->
   <link rel="stylesheet" href="static/style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  
+  <!-- JavaScript (MUST BE IN THIS ORDER) -->
+  <!-- With these -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+  <script src="https://unpkg.com/leaflet-velocity@2.0.0/dist/leaflet-velocity.min.js"></script>
+
+
+  <style>
+    /* Additional styles for the in situ date picker modal */
+    #insitu-date-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+    }
+
+    #insitu-date-modal .modal-content {
+      background-color: #2d3748;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #4a5568;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 5px;
+      color: white;
+    }
+
+    #insitu-date-list {
+      list-style: none;
+      padding: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    #insitu-date-list li {
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #4a5568;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    #insitu-date-list li:hover {
+      background-color: #5a677a;
+    }
+
+    #insitu-date-list .loading,
+    #insitu-date-list .no-dates,
+    #insitu-date-list .error {
+      text-align: center;
+      cursor: default;
+    }
+
+    #insitu-date-list .error {
+      color: #ff6b6b;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: white;
+    }
+
+    /* Enhanced Colorbar Styles */
+    #colorbar-wrapper {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(30, 30, 30, 0.95);
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-align: center;
+      font-family: sans-serif;
+      user-select: none;
+      width: 360px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      border: 1px solid #444;
+    }
+
+    #colorbar-container {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    #colorbar {
+      width: 100%;
+      height: 20px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      background: linear-gradient(to right, 
+        rgba(0, 0, 0, 0.3) 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        rgba(0, 0, 0, 0.3) 100%);
+      box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.1),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    #colorbar:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    #colorbar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 30%;
+      background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.2) 0%, 
+        rgba(255, 255, 255, 0) 100%);
+      border-radius: 4px 4px 0 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #colorbar-ticks {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      position: absolute;
+      bottom: -12px;
+    }
+
+    #colorbar-ticks .tick {
+      width: 1px;
+      height: 6px;
+      background: #eee;
+      position: relative;
+    }
+
+    #colorbar-ticks .tick::after {
+      content: attr(data-value);
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: #ddd;
+      white-space: nowrap;
+    }
+
+    #colorbar-label {
+      font-size: 13px;
+      color: #ddd;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+  </style>
 </head>
 <body>
 
@@ -60,6 +236,16 @@
     <button id="apply-month-year">Apply</button>
   </div>
 
+  <div class="sidebar-section">
+    <h3>Basemap</h3>
+    <select id="basemap-select" class="form-control">
+      <option value="satellite">Satellite</option>
+      <option value="osm">OpenStreetMap</option>
+      <option value="topo">Topographic</option>
+      <option value="terrain">Terrain</option>
+    </select>
+  </div>
+
   <label for="variable-select">Variables:</label>
   <select id="variable-select">
     <option value="cdom">CDOM</option>
@@ -80,12 +266,29 @@
     <option value="value-picker">Value picker</option>
     <option value="transect">Transect tool</option>
     <option value="timeseries">Timeseries tool</option>
+    <option value="overlay">Overlay Tool</option>
+    <option value="polygon">Polygon Analysis</option> <!-- Add this line -->
   </select>
+
+  <button id="clear-all-tools" class="tool-button" title="Clear all tools">
+  <i class="fas fa-broom"></i> Clear Tools
+  </button>
+
+
 </div>
 
+
+
 <div id="colorbar-wrapper">
-  <div id="colorbar"></div>
-  <div id="colorbar-label">CDOM (m⁻¹), range: 0–12</div>
+  <div id="colorbar-container">
+    <div id="colorbar"></div>
+    <div id="colorbar-ticks">
+      <div class="tick" data-value="0"></div>
+      <div class="tick" data-value="10"></div>
+      <div class="tick" data-value="20"></div>
+    </div>
+  </div>
+  <div id="colorbar-label">CDOM (m⁻¹)</div>
 </div>
 
 <div id="value-tooltip"></div>
@@ -93,14 +296,11 @@
 <div id="graph-container">
   <div id="graph-close">&times;</div>
   <div id="graph-title"></div>
-  <div id="graph-title"></div>
-  <button id="download-csv" style="position: absolute; top: 10px; right: 35px; background: #444; color: #eee; border: 1px solid #555; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Download CSV
-  </button>
+  <button id="download-csv" style="position: absolute; top: 10px; right: 35px; background: #444; color: #eee; border: 1px solid #555; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Download CSV</button>
   <div id="graph-wrapper">
     <canvas id="graph-canvas"></canvas>
   </div>
 </div>
-
 
 <!-- Date Picker Modal -->
 <div id="date-picker-modal">
@@ -127,7 +327,16 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- In Situ Date Picker Modal -->
+<div id="insitu-date-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('insitu-date-modal').style.display='none'">&times;</span>
+    <h3>Select Date with In Situ Data</h3>
+    <ul id="insitu-date-list"></ul>
+  </div>
+</div>
+
+
 <script src="https://unpkg.com/georaster"></script>
 <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
 <script src="static/app.js"></script>
