@@ -373,6 +373,8 @@ async def get_polygon_stats(request: PolygonRequest):
 
             with rasterio.open(tmp_path) as src:
                 # 1. Verify raster has data
+                
+                #This section throws error when running on GCP? maybe taking too long?
                 # height, width = src.shape
                 # sample_size = int(min(height, width) * 0.1)  # 10% of smaller dimension
 

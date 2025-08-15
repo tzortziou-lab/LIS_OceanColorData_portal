@@ -343,10 +343,10 @@ function enablePolygonTool(enable) {
     if (!polygonTool) {
       polygonTool = new L.Draw.Polygon(map, {
         shapeOptions: {
-          color: '#3388ff',
+          color: '#ff0000',
           weight: 2,
           opacity: 1,
-          fillColor: '#3388ff',
+          fillColor: '#ff0000',
           fillOpacity: 0.3
         },
         guidelineDistance: 20,
