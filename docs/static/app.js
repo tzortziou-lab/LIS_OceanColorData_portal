@@ -257,14 +257,16 @@ function updateColorbarTicks(maxValue) {
 }
 
 
-
 const now = new Date();
+const yesterday = new Date(now);
+yesterday.setDate(now.getDate() - 1);
+
 let currentMonth = now.getMonth(); // 0-indexed (0=January, 11=December)
 let currentYear = now.getFullYear(); 
 let currentLayer = null;
 let currentVariable = "cdom";
 let currentColormap = "turbo";
-let currentDate = now.toISOString().split('T')[0]; // "2025-08-15" (today's date)
+let currentDate = yesterday.toISOString().split('T')[0]; // Yesterday's date
 let valuePickerEnabled = false;
 let transectEnabled = false;
 let timeseriesEnabled = false;
