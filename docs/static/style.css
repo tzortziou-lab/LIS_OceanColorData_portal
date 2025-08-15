@@ -6,7 +6,7 @@ html, body {
   height: 100%; width: 100%;
 }
 #sidebar {
-  position: absolute; top: 10px; left: 10px; bottom: 200px; width: 250px;
+  position: absolute; top: 10px; left: 10px; bottom: 250px; width: 250px;
   display: flex; flex-direction: column; gap: 12px;
   background: #222; padding: 12px; border-radius: 10px; z-index: 1000;
   border: 1px solid #444; user-select: none;
@@ -630,10 +630,11 @@ margin-top: 5px;
   background-color: #ff4444;
   color: white;
   border: none;
-  padding: 8px 12px;
+  padding: 12px 12px;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 0px;
+  margin-top: 4px;
 }
 
 #clear-all-tools:hover {
