@@ -98,6 +98,7 @@ async def load_insitu_data():
 
 @app.get("/get_available_dates")
 async def get_available_dates(
+    
     variable: str = Query(..., description="Variable name (chl, spm, or cdom)")
 ):
     """
@@ -357,6 +358,7 @@ async def debug_dates_processing(variable: str = "chl"):
 # Add this with your other API endpoints
 @app.post("/get_polygon_stats")
 async def get_polygon_stats(request: PolygonRequest):
+    logger.info(f"Processing request for URL: {request.url}")
     try:
         # Validate polygon
         if not isinstance(request.polygon.get('coordinates'), list):
