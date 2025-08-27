@@ -9,11 +9,11 @@ All imagery is atmospherically corrected using POLYMER: https://hygeos.com/en/po
 
 Data products are derived using algorithms published in peer reviewed journals
 
-Colored Dissolved Organic Material (CDOM)
+Colored Dissolved Organic Material (CDOM):
 https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023JG007767
 
-Chlorophyll-a
+Chlorophyll-a:
 https://www.sciencedirect.com/science/article/pii/S1569843223000456
 
-Suspended Particulate Material (SPM)
+Suspended Particulate Material (SPM):
 https://odnature.naturalsciences.be/downloads/publications/2016_Nechad_ESALP.pdf
