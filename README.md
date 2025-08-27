@@ -1,32 +1,19 @@
 # lisoceancolor
 Long Island Sound Ocean Color Data Analytics App
 
-===============================================
-Languages & Frameworks
-===============================================
+This web application provides access to analytical tools for examining spatio-temporal trends in water quality parameters in Long Island Sound.
 
-Python 3.x
-  - Core logic and backend
-  - Scientific and geospatial processing
+The imagery presented is from Sentinel-3 OLCI and provided by the Copernicus Space Data Ecosystem.
 
-FastAPI
-  - REST API server (async support, OpenAPI docs)
+All imagery is atmospherically corrected using POLYMER: https://hygeos.com/en/polymer/
 
-JavaScript (ES6+)
-  - Frontend logic
+Data products are derived using algorithms published in peer reviewed journals
 
-HTML5/ CSS3
-  - UI layout adn styling
+Colored Dissolved Organic Material (CDOM)
+https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023JG007767
 
-Leaflet.js
-  - Interactive web mapping (draw tools, popups, basemap overlays)
+Chlorophyll-a
+https://www.sciencedirect.com/science/article/pii/S1569843223000456
 
-===============================================
-Remote Sensing & Data Processing
-===============================================
-
-Sentinel-3 OLCI data
-
-POLYMER atmospheric correction
-
-Xarray and Dask
+Suspended Particulate Material (SPM)
+https://odnature.naturalsciences.be/downloads/publications/2016_Nechad_ESALP.pdf
