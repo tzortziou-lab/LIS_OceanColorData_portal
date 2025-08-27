@@ -24,7 +24,7 @@ from app.utils.raster_utils import get_pixel_value, get_transect_values
 from app.utils.url_utils import format_url
 from app.utils.time_utils import generate_dates_in_range
 
-# Add this near your other Pydantic models (if any)
+
 class PolygonRequest(BaseModel):
     url: str
     polygon: dict  # GeoJSON polygon geometry

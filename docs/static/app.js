@@ -1,4 +1,4 @@
-// // Add this at the VERY TOP of app.js
+
 // if (!window.L || !L.Draw) {
 //   console.error('Leaflet.draw failed to load!');
 //   console.log('Leaflet available:', !!window.L);
@@ -78,7 +78,7 @@ document.getElementById('basemap-select').addEventListener('change', function(e)
   newBasemap.addTo(map);
   currentBasemap = newBasemap;
   
-  // Bring your data layers to front if needed
+  // Bring data layers to front if needed
   if (currentLayer) {
     currentLayer.bringToFront();
   }
@@ -95,15 +95,6 @@ L.tileLayer(
   { attribution: "Tiles © Esri", maxZoom: 19 }
 ).addTo(map);
 
-
-// // Add this check early in your JavaScript code
-// if (typeof L.Draw === 'undefined') {
-//     console.error('Leaflet.draw not loaded! Check:');
-//     console.log('- Script loading order');
-//     console.log('- Network tab for failed requests');
-//     console.log('- Console for other errors');
-//     alert('Drawing tools failed to load. Please refresh the page.');
-// }
 
 const baseURL = "https://storage.googleapis.com/lis-olci-netcdfs";
 const backendURL = "https://olci-api-372215495851.us-central1.run.app/get_value";
@@ -237,7 +228,7 @@ function generateColorbarGradient(colormapFn, maxVal, steps=20) {
   return `linear-gradient(to right, ${stops.join(", ")})`;
 }
 
-// Call this when you update the colorbar
+// Call this when updating the colorbar
 function updateColorbarTicks(maxValue) {
   const ticksContainer = document.getElementById('colorbar-ticks');
   if (!ticksContainer) return;
