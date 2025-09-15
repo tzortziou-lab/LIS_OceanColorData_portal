@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OLCI Viewer</title>
-  <meta charset="utf-8" />
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="static/style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
-  
-  <!-- JavaScript (MUST BE IN THIS ORDER) -->
-  <!-- With these -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-  <script src="https://unpkg.com/leaflet-velocity@2.0.0/dist/leaflet-velocity.min.js"></script>
+ <title>OLCI Viewer</title>
+<meta charset="utf-8" />
+
+<!-- ===== CSS ===== -->
+<!-- Leaflet core CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet.draw CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+<!-- Your custom CSS -->
+<link rel="stylesheet" href="static/style.css" />
+
+<!-- ===== JS ===== -->
+<!-- Chart.js (if needed for charts) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Leaflet core JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- <script src="https://unpkg.com/georaster-layer-for-leaflet@3.8.0/dist/georaster-layer-for-leaflet.min.js?cb=12345"></script> -->
+<!-- Leaflet.draw JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<!-- Leaflet-velocity plugin -->
+<script src="https://unpkg.com/leaflet-velocity@2.0.0/dist/leaflet-velocity.min.js"></script>
+<!-- <script src="https://unpkg.com/georaster-layer-for-leaflet/dist/georaster-layer-for-leaflet.min.js"></script> -->
+<script src="https://unpkg.com/georaster-layer-for-leaflet@3.8.0/dist/georaster-layer-for-leaflet.min.js"></script>
+
 
 
   <style>
@@ -337,8 +345,13 @@
 </div>
 
 
-<script src="https://unpkg.com/georaster"></script>
-<script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+<!-- Load pinned georaster first -->
+<script src="https://unpkg.com/georaster@1.6.0/dist/georaster.browser.bundle.min.js"></script>
+
+<!-- Load pinned GeoRasterLayer v3.8.0 -->
+<script src="https://unpkg.com/georaster-layer-for-leaflet@3.8.0/dist/georaster-layer-for-leaflet.min.js"></script>
+
+<!-- Then your app -->
 <script src="static/app.js"></script>
 </body>
 </html>
