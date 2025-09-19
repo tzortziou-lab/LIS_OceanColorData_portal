@@ -5,13 +5,13 @@ steps:
       [
         'build',
         '-t',
-        'us-central1-docker.pkg.dev/lisoceancolor/lisoceancolor-repo/olci-api',
+        'us-central1-docker.pkg.dev/lisoceancolor/lisoceancolor-repo/lisoceancolor-api',
         '.'
       ]
 
   # Step 2: Push Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', us-central1-docker.pkg.dev/lisoceancolor/lisoceancolor-repo/olci-api]
+    args: ['push', us-central1-docker.pkg.dev/lisoceancolor/lisoceancolor-repo/lisoceancolor-api]
 
   # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -22,7 +22,7 @@ steps:
         'deploy',
         'olci-api',
         '--image',
-        'us-central1-docker.pkg.dev/lisoceancolor/lisoceancolor-repo/olci-api',
+        'us-central1-docker.pkg.dev/lisoceancolor/lisoceancolor-repo/lisoceancolor-api',
         '--region',
         'us-central1',
         '--platform',
