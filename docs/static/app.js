@@ -1,18 +1,18 @@
-
 // if (!window.L || !L.Draw) {
-//   console.error('Leaflet.draw failed to load!');
-//   console.log('Leaflet available:', !!window.L);
-//   console.log('Leaflet.draw available:', !!L.Draw);
+//   console.warn('Leaflet.draw not detected, attempting fallback load...');
   
-//   // Try fallback loading
 //   const script = document.createElement('script');
 //   script.src = 'https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.js';
+//   script.onload = () => {
+//     console.log('Leaflet.draw successfully loaded via fallback.');
+//   };
+//   script.onerror = () => {
+//     console.error('Failed to load Leaflet.draw fallback. Polygon tool will not work.');
+//   };
 //   document.head.appendChild(script);
-  
-//   throw new Error('Leaflet.draw not loaded - attempting fallback. Please refresh.');
 // }
-
-// console.log('Leaflet version:', L.version); // Should show 1.9.4
+console.log('Leaflet version:', L.version); // Should show 1.9.4
+console.log(GeoRasterLayer); // should be defined
 // console.log('Leaflet.draw available:', !!L.Draw); // Should be true
 // console.log('Draw Polygon class:', L.Draw.Polygon); // Should show function
 
@@ -67,6 +67,10 @@ const basemaps = {
 let currentBasemap = basemaps.satellite;
 currentBasemap.addTo(map);
 
+if (!L.Draw) {
+  console.error("Leaflet.draw is still missing after fallback load");
+}
+
 // Handle basemap changes
 document.getElementById('basemap-select').addEventListener('change', function(e) {
   const newBasemap = basemaps[e.target.value];
@@ -76,6 +80,7 @@ document.getElementById('basemap-select').addEventListener('change', function(e)
   }
   
   newBasemap.addTo(map);
+  new GeoRasterLayer({ georaster }).addTo(map);
   currentBasemap = newBasemap;
   
   // Bring data layers to front if needed
@@ -95,6 +100,7 @@ L.tileLayer(
   { attribution: "Tiles © Esri", maxZoom: 19 }
 ).addTo(map);
 
+// const baseURL = "https://storage.googleapis.com/lis_olci_cogs"
 
 const baseURL = "https://storage.googleapis.com/lis-olci-netcdfs";
 const backendURL = "https://olci-api-372215495851.us-central1.run.app/get_value";
@@ -250,7 +256,7 @@ function updateColorbarTicks(maxValue) {
 
 const now = new Date();
 const yesterday = new Date(now);
-yesterday.setDate(now.getDate() - 1);
+yesterday.setDate(now.getDate() - 7);
 
 let currentMonth = now.getMonth(); // 0-indexed (0=January, 11=December)
 let currentYear = now.getFullYear(); 
@@ -433,14 +439,6 @@ function showDatePicker() {
 
 function hideDatePicker() {
   document.getElementById('date-picker-modal').style.display = 'none';
-}
-
-function handlePolygonCreated(e) {
-  drawnPolygon = e.layer;
-  polygonLayerGroup.addLayer(drawnPolygon);
-  
-  // Get polygon stats
-  analyzePolygonArea(drawnPolygon);
 }
 
 
@@ -1024,55 +1022,126 @@ function getChartOptions(graphType, label, dataMax) {
   };
 }
 
+
+
 async function loadVariable(variable) {
-  currentVariable = variable;
-  const { path, compact } = parseDate(currentDate);
-  const { max, units, label } = variableSettings[variable];
-  document.getElementById("colorbar").style.background = generateColorbarGradient(colormaps[currentColormap], max);
-  updateColorbarTicks(max);
-  const fullURL = `${baseURL}/${path}/LIS_${compact}_${variable}.tif`;
-
-  if (currentLayer) map.removeLayer(currentLayer);
-
+  console.log(`=== Starting loadVariable for: ${variable} ===`);
+  console.log(`Current date: ${currentDate}, Colormap: ${currentColormap}`);
+  
   try {
+    currentVariable = variable;
+    console.log(`Current variable set to: ${currentVariable}`);
+
+    const { path, compact } = parseDate(currentDate);
+    console.log(`Date parsed - path: ${path}, compact: ${compact}`);
+
+    const { max, units, label } = variableSettings[variable];
+    console.log(`Variable settings - max: ${max}, units: ${units}, label: ${label}`);
+
+    document.getElementById("colorbar").style.background = generateColorbarGradient(colormaps[currentColormap], max);
+    updateColorbarTicks(max);
+    console.log("Colorbar updated successfully");
+
+    const cacheBuster = Date.now();
+    const fullURL = `${baseURL}/${path}/LIS_${compact}_${variable}.tif?cacheBust=${cacheBuster}`;
+    console.log(`Fetching from URL: ${fullURL}`);
+
+        // Remove all previous GeoRasterLayer instances
+    for (const id in map._layers) {
+      const layer = map._layers[id];
+      // Check if this layer is a GeoRasterLayer (or any custom layer you want to remove)
+      if (layer && layer.georasters) { 
+        console.log("Removing old GeoRasterLayer:", layer);
+        await map.removeLayer(layer);
+      }
+    }
+
+
+
+    console.log("Starting fetch request");
     const response = await fetch(fullURL);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    console.log(`Fetch response status: ${response.status}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    console.log("Fetch completed successfully");
 
+    console.log("Converting response to arrayBuffer");
     const arrayBuffer = await response.arrayBuffer();
-    const georaster = await parseGeoraster(arrayBuffer);
+    console.log(`ArrayBuffer received (size: ${arrayBuffer.byteLength} bytes)`);
 
+    console.log("Parsing GeoRaster");
+    const georaster = await parseGeoraster(arrayBuffer);
+    console.log("GeoRaster parsed successfully");
+    console.log("INSPECTING GEORASTER:", georaster);
+
+    console.log("Creating new GeoRasterLayer");
     currentLayer = new GeoRasterLayer({
-      georaster,
-      opacity: 0.8,
-      resolution: 512,
+      georaster: georaster,
+      opacity: 1,
+      resolution: 256,
       pixelValuesToColorFn: values => {
         const val = values[0];
         return val === null || val === -9999 ? null : colormaps[currentColormap](val, max);
       }
     });
 
+    console.log("GeoRasterLayer created");
+    console.log("Adding layer for date:", currentDate);
+    console.log("Current layer:", currentLayer)
+
     currentLayer.addTo(map);
-    map.fitBounds(currentLayer.getBounds());
+    
+
+    console.log(currentLayer._map); // Should reference your map instance
+    console.log("Tiles:", currentLayer._tiles); // Should show loaded tiles
+    console.log("Layer added to map");
+    console.log("Map layers:", map._layers);
+
 
     document.getElementById("colorbar-label").innerText = `${label} (${units})`;
     document.getElementById("colorbar").style.background = generateColorbarGradient(colormaps[currentColormap], max);
+    console.log("UI elements updated");
 
     // Only recalculate polygon stats if polygon tool is enabled and a polygon exists
     if (polygonEnabled && drawnPolygon) {
+      console.log("Polygon tool enabled with existing polygon, analyzing area");
       analyzePolygonArea(drawnPolygon);
+      console.log("Polygon analysis completed");
+    } else {
+      console.log("Polygon analysis skipped - not enabled or no polygon");
     }
 
-    if (overlayEnabled) loadOverlayData();
+    if (overlayEnabled) {
+      console.log("Overlay enabled, loading overlay data");
+      loadOverlayData();
+      console.log("Overlay data loaded");
+    } else {
+      console.log("Overlay disabled, skipping");
+    }
+
+    console.log(`=== loadVariable completed successfully for: ${variable} ===`);
+    
   } catch(err) {
-    console.error("Failed to load GeoTIFF:", err);
+    console.error("=== ERROR in loadVariable ===");
+    console.error(`Error type: ${err.name}`);
+    console.error(`Error message: ${err.message}`);
+    console.error(`Stack trace: ${err.stack}`);
+    console.error("Full error object:", err);
+    console.error("=== END ERROR ===");
+
     // Show error in stats panel if polygon tool is active
     if (polygonEnabled && drawnPolygon) {
+      console.error("Showing polygon error in UI");
       showPolygonError(`Error loading data for ${currentDate}`);
     } else {
+      console.error("Showing alert for general error");
       alert(`Error loading ${variable} layer for date ${currentDate}`);
     }
   }
 }
+
 
 // Event listeners
 document.getElementById("variable-select").addEventListener("change", e => {
