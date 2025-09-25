@@ -100,9 +100,9 @@ L.tileLayer(
   { attribution: "Tiles © Esri", maxZoom: 19 }
 ).addTo(map);
 
-// const baseURL = "https://storage.googleapis.com/lis_olci_cogs"
+const baseURL = "https://storage.googleapis.com/lis_olci_cogs"
 
-const baseURL = "https://storage.googleapis.com/lis-olci-netcdfs";
+// const baseURL = "https://storage.googleapis.com/lis-olci-netcdfs";
 const backendURL = "https://olci-api-372215495851.us-central1.run.app/get_value";
 const transectBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_transect";
 const timeseriesBackendURL = "https://olci-api-372215495851.us-central1.run.app/get_timeseries";
