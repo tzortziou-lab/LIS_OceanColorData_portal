@@ -28,7 +28,7 @@ const map = L.map("map", {
   minZoom: 9,  // Prevent zooming out too far
   //maxBounds: LIS_BOUNDS,  // Optional: constrain panning
   //maxBoundsViscosity: 1.0  // How strongly to enforce bounds
-}).setView([40, -73.0], 7);  // Centered on LIS
+}).setView([41, -73.0], 7);  // Centered on LIS
 L.control.zoom({ position: 'topright' }).addTo(map);
 
 // Set these after map initialization
@@ -530,7 +530,8 @@ async function getTransectData() {
     const data = await response.json();
     
     if (response.ok && data.values) {
-      plotGraph(data.values, data.distances, 'Transect Profile', 'transect');
+      const formattedDistances = data.distances.map(d => parseFloat(d).toFixed(1));
+      plotGraph(data.values, formattedDistances, 'Transect Profile', 'transect');
     } else {
       alert('Error getting transect data');
     }
