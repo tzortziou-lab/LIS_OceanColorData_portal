@@ -80,8 +80,14 @@ document.getElementById('basemap-select').addEventListener('change', function(e)
   }
   
   newBasemap.addTo(map);
-  new GeoRasterLayer({ georaster }).addTo(map);
-  currentBasemap = newBasemap;
+
+ if (currentLayer) {
+    currentLayer.addTo(map);
+  }
+
+
+  // new GeoRasterLayer({ georaster }).addTo(map);
+  // currentBasemap = newBasemap;
   
   // Bring data layers to front if needed
   if (currentLayer) {
