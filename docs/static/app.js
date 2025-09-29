@@ -262,7 +262,7 @@ function updateColorbarTicks(maxValue) {
 
 const now = new Date();
 const yesterday = new Date(now);
-yesterday.setDate(now.getDate() - 7);
+yesterday.setDate(now.getDate() - 1);
 
 let currentMonth = now.getMonth(); // 0-indexed (0=January, 11=December)
 let currentYear = now.getFullYear(); 
